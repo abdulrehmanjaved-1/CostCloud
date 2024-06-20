@@ -1,0 +1,55 @@
+#graphql
+
+type Query {
+    statistics(
+        prometheusApi: String!
+        prometheusDuration: String = "30d"
+        prometheusInstance: String!
+        prometheusJob: String = "node"
+    ): Node
+}
+
+type CPU {
+    arch: String
+    avgUtil: Float
+    maxUtil: Float
+    model: String
+    total: Int
+}
+
+type Disk {
+    avgIops: Float
+    avgMbps: Float
+    maxIops: Float
+    maxMbps: Float
+    nvme: Boolean
+    totalGiB: Int
+}
+
+type Memory {
+    avgUtil: Float
+    maxUtil: Float
+    totalGiB: Int
+}
+
+type Network {
+    avgMbps: Float
+    maxMbps: Float
+    recvGB: Float
+    sentGB: Float
+}
+
+type Node {
+    cpu: CPU
+    disk: Disk
+    memory: Memory
+    network: Network
+    os: OS
+    timestamp: String
+}
+
+type OS {
+    name: String
+    type: String
+    version: String
+}

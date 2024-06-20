@@ -1,0 +1,263 @@
+{
+  "resource_version": 66,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "aws",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "us_east_1_instance",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "price",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_price",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "bare_metal",
+                    "architecture",
+                    "family",
+                    "os",
+                    "processor",
+                    "sku",
+                    "software",
+                    "storage",
+                    "tenancy",
+                    "type",
+                    "usage",
+                    "memory",
+                    "speed",
+                    "disk_io",
+                    "gpus",
+                    "network_io",
+                    "vcpu",
+                    "date"
+                  ],
+                  "filter": {},
+                  "query_root_fields": [
+                    "select"
+                  ],
+                  "subscription_root_fields": [
+                    "select"
+                  ]
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "us_east_1_price",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "instance",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_instance",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "storage",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_storage",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "transfer",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_transfer",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "contract",
+                    "description",
+                    "offering_class",
+                    "purchase_option",
+                    "rate_code",
+                    "sku",
+                    "term_code",
+                    "unit",
+                    "unit_price",
+                    "date"
+                  ],
+                  "filter": {},
+                  "query_root_fields": [
+                    "select"
+                  ],
+                  "subscription_root_fields": [
+                    "select"
+                  ]
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "us_east_1_storage",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "price",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_price",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "description",
+                    "group_name",
+                    "media_type",
+                    "name",
+                    "sku",
+                    "usage",
+                    "volume_type",
+                    "max_mbps",
+                    "max_iops",
+                    "max_size",
+                    "date"
+                  ],
+                  "filter": {},
+                  "query_root_fields": [
+                    "select"
+                  ],
+                  "subscription_root_fields": [
+                    "select"
+                  ]
+                },
+                "comment": ""
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "us_east_1_transfer",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "price",
+                "using": {
+                  "manual_configuration": {
+                    "column_mapping": {
+                      "sku": "sku"
+                    },
+                    "insertion_order": null,
+                    "remote_table": {
+                      "name": "us_east_1_price",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ],
+            "select_permissions": [
+              {
+                "role": "anonymous",
+                "permission": {
+                  "columns": [
+                    "from_location",
+                    "from_region",
+                    "from_type",
+                    "operation",
+                    "sku",
+                    "to_location",
+                    "to_region",
+                    "to_type",
+                    "type",
+                    "usage",
+                    "date"
+                  ],
+                  "filter": {},
+                  "query_root_fields": [
+                    "select"
+                  ],
+                  "subscription_root_fields": [
+                    "select"
+                  ]
+                },
+                "comment": ""
+              }
+            ]
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "from_env": "PG_DATABASE_URL"
+            },
+            "isolation_level": "read-committed",
+            "use_prepared_statements": false
+          }
+        }
+      }
+    ]
+  }
+}

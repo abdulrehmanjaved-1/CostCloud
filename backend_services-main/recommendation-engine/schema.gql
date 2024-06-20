@@ -1,0 +1,147 @@
+#graphql
+
+type Query {
+    recommendation(
+        cloudProvider: String = "aws"
+        cloudRegion: String = "us-east-1"
+        gpus: Int = 0
+        results: Int = 1
+        prometheusApi: String!
+        prometheusDuration: String = "30d"
+        prometheusInstance: String!
+        prometheusJob: String = "node"
+        tenancy: String = "Shared"
+    ): [Instance]
+}
+
+type Cost {    
+    currency: String
+    disk: DiskCost
+    duration: String
+    instance: InstanceCost
+    network: NetworkCost
+    total: Float
+}
+
+type CPU {
+    architecture: String
+    processor: String
+    speed: Float
+    vCPU: Int
+}
+
+type Disk {
+    iops: Int
+    totalGiB: Float
+    type: String
+}
+
+type DiskCost {
+    iops: DiskIopsCost
+    sizeGB: DiskSizeCost
+    throughputMbps: DiskMbpsCost
+    type: String
+}
+
+type DiskIopsCost {
+    provisioned: Int
+    total: Float
+    unit: String
+    unitPrice: Float
+}
+
+type DiskMbpsCost {
+    provisioned: Float
+    total: Float
+    unit: String
+    unitPrice: Float
+}
+
+type DiskSizeCost {
+    provisioned: Float
+    total: Float
+    unit: String
+    unitPrice: Float
+}
+
+type Instance {
+    cpu: CPU
+    baremetal: Boolean
+    cost: Cost
+    date: String
+    disk: Disk
+    family: String
+    gpus: Int
+    memory: Memory
+    network: Network
+    os: String
+    software: String
+    statistics: Stats
+    tenancy: String
+    type: String
+}
+
+type InstanceCost {
+    total: Float
+    unit: String
+    unitPrice: Float
+}
+
+type Memory {
+    totalGiB: Float
+}
+
+type Network {
+    throughputMbps: Int
+}
+
+type NetworkCost {
+    outGB: Float
+    total: Float
+    unit: String
+}
+
+type Stats {
+    cpu: StatsCPU
+    disk: StatsDisk
+    memory: StatsMemory
+    network: StatsNetwork
+    os: StatsOS
+    timestamp: String
+}
+
+type StatsCPU {
+    arch: String
+    avgUtil: Float
+    maxUtil: Float
+    model: String
+    total: Int
+}
+
+type StatsDisk {
+    avgIops: Int
+    avgMbps: Float
+    maxIops: Int
+    maxMbps: Float
+    nvme: Boolean
+    totalGiB: Int
+}
+
+type StatsMemory {
+    avgUtil: Float
+    maxUtil: Float
+    totalGiB: Int
+}
+
+type StatsNetwork {
+    avgMbps: Float
+    maxMbps: Float
+    recvGB: Float
+    sentGB: Float
+}
+
+type StatsOS {
+    name: String
+    type: String
+    version: String
+}

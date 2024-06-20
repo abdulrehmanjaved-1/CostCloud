@@ -1,0 +1,6 @@
+.DS_Store
+.env
+.eslintrc.cjs
+data
+node_modules
+package-lock.json

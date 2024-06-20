@@ -1,0 +1,25 @@
+{
+  "name": "pricing-engine",
+  "version": "1.0.0",
+  "description": "Pricing Engine API",
+  "type": "module",
+  "main": "app.mjs",
+  "author": "Matt Kryshak",
+  "license": "UNLICENSED",
+  "keywords": [],
+  "dependencies": {
+    "pg": "^8.11.3",
+    "sequelize": "^6.37.1",
+    "sql-formatter": "^15.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.0"
+  },
+  "nodemonConfig": {
+    "ext": "gql,js,json,mjs",
+    "watch": [
+      "*.*",
+      ".env"
+    ]
+  }
+}

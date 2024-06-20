@@ -1,0 +1,123 @@
+version: "3.9"
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    network_mode: host
+    volumes:
+      - ${PWD}/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - grafana:/var/lib/grafana
+  
+  graphql-engine:
+    image: hasura/graphql-engine:v2.37.1
+    container_name: grapqhl-engine
+    restart: always
+    stop_grace_period: 1s
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecret
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+      HASURA_GRAPHQL_ENABLED_APIS: config,graphql,metadata,metrics
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: http-log,query-log,startup,webhook-log,websocket-log
+      HASURA_GRAPHQL_LOG_LEVEL: INFO
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/postgres
+      HASURA_GRAPHQL_METRICS_SECRET: myadminsecret
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      PG_DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/azure
+    networks:
+      - local
+    ports:
+      - 8000:8080
+  
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    network_mode: host
+    volumes:
+      - ${PWD}/nginx/certs:/etc/nginx/certs
+      - ${PWD}/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ${PWD}/nginx/nginx.conf:/etc/nginx/nginx.conf
+  
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    command:
+      - "--collector.cpu.info.flags-include=^.*"
+      - "--path.rootfs=/host"
+    network_mode: host
+    pid: host
+    volumes:
+      - "/:/host:ro,rslave"
+  
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+    networks:
+      - local
+    ports:
+      - 5432:5432
+    volumes:
+      - ${PWD}/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - postgres:/var/lib/postgresql/data
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.external-url=/prometheus/"
+    network_mode: host
+    volumes:
+      - ${PWD}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+  
+  recommendation-engine:
+    image: igraphql/recommendation-engine:latest
+    container_name: recommendation-engine
+    stop_grace_period: 1s
+    restart: always
+    environment:
+      - ACCESS_LOG=false
+      - BASE_PATH=/recommendation/v1
+      - CURRENCY=USD
+      - ENDPOINT_METADATA=http://localhost/metadata/v1/graphql
+      - ENDPOINT_STATS_COLLECTOR=http://localhost/stats/v1/graphql
+    network_mode: host
+    volumes:
+      - ${PWD}/recommendation-engine/conf.json:/docker-entrypoint.d/conf.json
+  
+  stats-collector:
+    image: igraphql/stats-collector:latest
+    container_name: stats-collector
+    stop_grace_period: 1s
+    restart: always
+    environment:
+      - ACCESS_LOG=false
+      - BASE_PATH=/stats/v1
+    network_mode: host
+    volumes:
+      - ${PWD}/stats-collector/conf.json:/docker-entrypoint.d/conf.json
+
+networks:
+  local:
+    name: local
+
+volumes:
+  grafana:
+    name: grafana
+  postgres:
+    name: postgres
+  prometheus:
+    name: prometheus
